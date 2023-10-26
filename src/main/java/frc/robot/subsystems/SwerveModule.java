@@ -43,11 +43,16 @@ public class SwerveModule extends SubsystemBase {
     this.m_driveMotorEncoder = m_driveMotor.getEncoder(); 
     this.m_turningMotorEncoder = m_turningMotor.getEncoder();
 
+    this.m_turningAbsoluteEncoder.configMagnetOffset(Math.toDegrees(m_turningEncoderOffsetRad));
+
     // Configure encoder conversions
     this.m_driveMotorEncoder.setPositionConversionFactor(Constants.Swerve.Module.kDriveEncoder_RotationToMeter); 
     this.m_driveMotorEncoder.setVelocityConversionFactor(Constants.Swerve.Module.kDriveEncoder_RPMToMeterPerSecond);
     this.m_turningMotorEncoder.setPositionConversionFactor(Constants.Swerve.Module.kTurningEncoder_RotationToRadian); 
     this.m_turningMotorEncoder.setVelocityConversionFactor(Constants.Swerve.Module.kTurningEncoder_RPMToRadianPerSecond);
+
+    // PID Continuous input
+    Constants.Swerve.Module.getTurningPIDController().enableContinuousInput(0, Math.PI * 2);
 
     // Set module name
     m_name = (String) Arr[7];
@@ -70,7 +75,7 @@ public class SwerveModule extends SubsystemBase {
     // The position of the encoder is given from [0, 360) degrees
     // however the getAbsoluteEncoderRad() function returns the value in radians and inverts it if needed
     // The offset is already in radians so it is just added
-    m_turningMotorEncoder.setPosition(getAbsoluteEncoderRad() + m_turningEncoderOffsetRad);
+    m_turningMotorEncoder.setPosition(getAbsoluteEncoderRad());
 
     // Make sure it's using meters instead of rotations
     this.m_driveMotorEncoder.setPositionConversionFactor(Constants.Swerve.Module.kDriveEncoder_RotationToMeter); 
@@ -118,6 +123,9 @@ public class SwerveModule extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("SwerveDrive/" + m_name + "/DegTurningMotorEncoder", Math.toDegrees(getTurningEncoderPositionRad()));
+    SmartDashboard.putNumber("SwerveDrive/" + m_name + "/DegAbsoluteEncoder", Math.toDegrees(getAbsoluteEncoderRad()));
+
     SmartDashboard.putNumber("SwerveDrive/" + m_name + "/RadTurningMotorEncoder", getTurningEncoderPositionRad());
     SmartDashboard.putNumber("SwerveDrive/" + m_name + "/RadAbsoluteEncoder", getAbsoluteEncoderRad());
   }

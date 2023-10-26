@@ -52,7 +52,7 @@ public class DriveSwerve extends CommandBase {
     ySpeed = yLimiter.calculate(ySpeed) * Physical.kTeleopMaxSpeedMetersPerSecond;
     rotSpeed = rotLimiter.calculate(rotSpeed) * Physical.kTeleopMaxAngularSpeedRadiansPerSecond;
 
-    ChassisSpeeds m_chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, m_swerveDrive.getRotation2d());
+    ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, rotSpeed);
     SwerveModuleState[] m_moduleStates = m_swerveDrive.m_swerveDriveKinematics.toSwerveModuleStates(m_chassisSpeeds);
     m_swerveDrive.setModuleStates(m_moduleStates);
   }
