@@ -34,7 +34,7 @@ public class RobotContainer {
       )
     );
 
-    m_driverController.rightTrigger(0.1).whileTrue(new DriveSwerve(m_swerveDrive, () -> m_driverController.getRightTriggerAxis(), () -> 0.0, () -> 0.0));
+    m_driverController.rightTrigger(0.1).whileTrue(new DriveSwerve(m_swerveDrive, () -> 0.0, () -> m_driverController.getRightTriggerAxis(), () -> 0.0));
   }
 
   public Command getAutonomousCommand() {
