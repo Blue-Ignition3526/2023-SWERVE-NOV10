@@ -64,23 +64,23 @@ public final class Constants {
     public final static class Motors {
       //! OFFSETS ARE CALCULATED AS THE -(THE DIFFERENCE OF SWERVE ABSOLUTE ENCODER "0" and ABSOLUTE ENCODER 0 ---IN RADIANS---)
       public static final Object[] kFrontLeftVars = { 
-        0.0, // Offset
-        false, // Inverted
+        Math.toRadians(-104), // Offset
+        true, // Inverted
         11, // Absolute Encoder ID
         22, // Drive Motor ID
         21, // Turning Motor ID
         true, // Drive Motor Inverted
-        true, // Turning Motor Inverted
+        false, // Turning Motor Inverted
         "Front Left" // Name
       };
       public static final Object[] kFrontRightVars = {
-        0.0, // Offset
-        false, // Inverted
+        Math.toRadians(-43.857421875), // Offset
+        true, // Inverted
         12, //[] Absolute Encoder ID
         24, // Drive Motor ID
         23, // Turning Motor ID
         false, // Drive Motor Inverted
-        true, // Turning Motor Inverted
+        false, // Turning Motor Inverted
         "Front Right" // Name
       };
       public static final Object[] kBackLeftVars = {
