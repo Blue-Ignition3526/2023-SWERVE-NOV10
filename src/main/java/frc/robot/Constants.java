@@ -19,6 +19,8 @@ public final class Constants {
       public static final double kDriveMotorGearRatio = 1.0 / 6.12; // 6.12:1 Drive
       public static final double kTurningMotorGearRatio = 1.0 / 12.8; // 12.8:1 Steering
 
+      public static final double kGlobalModuleTurningOffset = Math.toRadians(-90);
+
       public static final double kDriveEncoder_RotationToMeter = kDriveMotorGearRatio * kWheelDiameterMeters * Math.PI; // Conversion Rotaciones a Metros
       public static final double kDriveEncoder_RPMToMeterPerSecond = kDriveEncoder_RotationToMeter / 60.0; // Conversion RPM a Metros por Segundo
 
@@ -64,7 +66,7 @@ public final class Constants {
     public final static class Motors {
       //! OFFSETS ARE CALCULATED AS THE -(THE DIFFERENCE OF SWERVE ABSOLUTE ENCODER "0" and ABSOLUTE ENCODER 0 ---IN RADIANS---)
       public static final Object[] kFrontLeftVars = { 
-        Math.toRadians(-107.841796875 - 90), // Offset
+        Math.toRadians(-107.841796875), // Offset
         true, // Inverted
         11, // Absolute Encoder ID
         22, // Drive Motor ID
@@ -74,7 +76,7 @@ public final class Constants {
         "Front Left" // Name
       };
       public static final Object[] kFrontRightVars = {
-        Math.toRadians(-38.583984375 - 90), // Offset
+        Math.toRadians(-38.583984375), // Offset
         true, // Inverted
         12, // Absolute Encoder ID
         24, // Drive Motor ID
@@ -84,7 +86,7 @@ public final class Constants {
         "Front Right" // Name
       };
       public static final Object[] kBackLeftVars = {
-        Math.toRadians(-236.95312499999997 - 90), // Offset
+        Math.toRadians(-236.95312499999997), // Offset
         false, // Inverted
         13, // Absolute Encoder ID
         26, // Drive Motor ID
@@ -94,7 +96,7 @@ public final class Constants {
         "Back Left" // Name
       };
       public static final Object[] kBackRightVars = {
-        Math.toRadians(-105.46875 - 90), // Offset
+        Math.toRadians(-105.46875), // Offset
         true, // Inverted
         14, // Absolute Encoder ID
         27, // Turning Motor ID

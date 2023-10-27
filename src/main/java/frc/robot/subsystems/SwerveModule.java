@@ -43,7 +43,7 @@ public class SwerveModule extends SubsystemBase {
     this.m_driveMotorEncoder = m_driveMotor.getEncoder(); 
     this.m_turningMotorEncoder = m_turningMotor.getEncoder();
 
-    this.m_turningAbsoluteEncoder.configMagnetOffset(Math.toDegrees(m_turningEncoderOffsetRad));
+    this.m_turningAbsoluteEncoder.configMagnetOffset(Math.toDegrees(m_turningEncoderOffsetRad) + Constants.Swerve.Module.kGlobalModuleTurningOffset);
 
     // Configure encoder conversions
     this.m_driveMotorEncoder.setPositionConversionFactor(Constants.Swerve.Module.kDriveEncoder_RotationToMeter); 
