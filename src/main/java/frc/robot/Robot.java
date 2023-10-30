@@ -35,20 +35,20 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotInit() {
-    if (isReal()) {
-      try {
-        Logger.getInstance().addDataReceiver(new WPILOGWriter("/U")); // Log to a USB stick
-      } catch (Exception err) {System.out.println("Failed to create WPILOGWriter, will not log to USB Stick");}
+    // if (isReal()) {
+      // try {
+      //   Logger.getInstance().addDataReceiver(new WPILOGWriter("/U")); // Log to a USB stick
+      // } catch (Exception err) {System.out.println("Failed to create WPILOGWriter, will not log to USB Stick");}
 
       Logger.getInstance().addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-    } else {
-      try {
-        setUseTiming(false); // Run as fast as possible
-        String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
-        Logger.getInstance().setReplaySource(new WPILOGReader(logPath)); // Read replay log
-        Logger.getInstance().addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
-      } catch (Exception err) {System.out.println("Cannot start simulation logging");}
-    }
+    // } else {
+    //   try {
+    //     setUseTiming(false); // Run as fast as possible
+    //     String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
+    //     Logger.getInstance().setReplaySource(new WPILOGReader(logPath)); // Read replay log
+    //     Logger.getInstance().addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
+    //   } catch (Exception err) {System.out.println("Cannot start simulation logging");}
+    // }
 
     // Logger.getInstance().disableDeterministicTimestamps() // See "Deterministic Timestamps" in the "Understanding Data Flow" page
     Logger.getInstance().start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.

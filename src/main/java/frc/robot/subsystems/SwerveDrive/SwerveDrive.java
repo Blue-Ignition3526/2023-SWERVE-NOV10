@@ -30,5 +30,9 @@ public class SwerveDrive extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.getInstance().processInputs("SwerveDrive", inputs);
+        Logger.getInstance().recordOutput("SwerveDrive/SwerveModuleStates", io.getModuleStates());
+        Logger.getInstance().recordOutput("SwerveDrive/RobotHeadingRad", io.getRotation2d().getRadians());
+
+        if (io.getOdometry() != null) Logger.getInstance().recordOutput("SwerveDrive/RobotPose", io.getOdometry().getPoseMeters());
     }
 }

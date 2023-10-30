@@ -8,6 +8,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants;
 
@@ -28,7 +29,7 @@ public class SwerveModuleIODriveFalconTurnNeo implements SwerveModuleIO {
     private final String m_name;
 
     // Current state
-    private SwerveModuleState state;
+    private SwerveModuleState state = new SwerveModuleState();
 
     public SwerveModuleIODriveFalconTurnNeo(Object[] Arr) {
         // Get variables from options and add them to the class
@@ -137,5 +138,9 @@ public class SwerveModuleIODriveFalconTurnNeo implements SwerveModuleIO {
     // Returns the current state
     public SwerveModuleState getState() {
         return state;
+    }
+
+    public SwerveModulePosition getPosition() {
+        return new SwerveModulePosition(m_driveMotor.getSelectedSensorPosition(), new Rotation2d(getAbsoluteEncoderRad()));
     }
 }

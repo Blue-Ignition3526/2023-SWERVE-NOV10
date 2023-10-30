@@ -1,5 +1,7 @@
 package frc.robot.subsystems.SwerveModule;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class SwerveModuleIOSim implements SwerveModuleIO {
@@ -7,7 +9,7 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
     private final String m_name;
 
     // Current state
-    private SwerveModuleState state;
+    private SwerveModuleState state = new SwerveModuleState();
 
     public SwerveModuleIOSim(Object[] Arr) {
         // Set module name
@@ -43,5 +45,9 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
     // Returns the current state
     public SwerveModuleState getState() {
         return state;
+    }
+
+    public SwerveModulePosition getPosition() {
+        return new SwerveModulePosition(0, new Rotation2d());
     }
 }

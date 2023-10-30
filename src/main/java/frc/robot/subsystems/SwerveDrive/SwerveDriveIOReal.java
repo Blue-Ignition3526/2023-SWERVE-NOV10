@@ -22,10 +22,12 @@ public class SwerveDriveIOReal implements SwerveDriveIO {
     private final AHRS m_gyro = new AHRS(I2C.Port.kMXP);
 
     // Create a swerve drive odometry instance to calculate robot position
-    public final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(Constants.Swerve.Physical.m_swerveDriveKinematics, getRotation2d(), new SwerveModulePosition[]{});
-
-    // Store module states
-    private SwerveModuleState[] states = {};
+    public final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(Constants.Swerve.Physical.m_swerveDriveKinematics, getRotation2d(), new SwerveModulePosition[]{
+        new SwerveModulePosition(),
+        new SwerveModulePosition(),
+        new SwerveModulePosition(),
+        new SwerveModulePosition()
+    });
 
     public SwerveDriveIOReal(
         SwerveModule m_frontLeft,
@@ -43,12 +45,13 @@ public class SwerveDriveIOReal implements SwerveDriveIO {
             try {
                 Thread.sleep(1000);
                 m_gyro.reset();
+                Thread.sleep(1000);
+                m_gyro.zeroYaw();
             } catch (Exception e) {}
         }).start();
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        this.states = desiredStates;
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.Physical.kMaxSpeedMetersPerSecond);
         m_frontLeft.setState(desiredStates[0]);
         m_frontRight.setState(desiredStates[1]);
@@ -64,22 +67,41 @@ public class SwerveDriveIOReal implements SwerveDriveIO {
     }
 
     public void updateInputs(SwerveDriveIOInputs inputs) {
-        inputs.frontLeftAngle = states[0].angle.getRadians();
-        inputs.frontLeftSpeed = states[0].speedMetersPerSecond;
+        inputs.frontLeftAngle = this.m_frontLeft.getState().angle.getRadians();
+        inputs.frontLeftSpeed = this.m_frontLeft.getState().speedMetersPerSecond;
 
-        inputs.frontRightAngle = states[1].angle.getRadians();
-        inputs.frontRightSpeed = states[1].speedMetersPerSecond;
+        inputs.frontRightAngle = this.m_frontRight.getState().angle.getRadians();
+        inputs.frontRightSpeed = this.m_frontRight.getState().speedMetersPerSecond;
 
-        inputs.backLeftAngle = states[2].angle.getRadians();
-        inputs.backLeftSpeed = states[2].speedMetersPerSecond;
+        inputs.backLeftAngle = this.m_backLeft.getState().angle.getRadians();
+        inputs.backLeftSpeed = this.m_backLeft.getState().speedMetersPerSecond;
 
-        inputs.backRightAngle = states[3].angle.getRadians();
-        inputs.backRightSpeed = states[3].speedMetersPerSecond;
+        inputs.backRightAngle = this.m_backRight.getState().angle.getRadians();
+        inputs.backRightSpeed = this.m_backRight.getState().speedMetersPerSecond;
 
         inputs.gyroAngle = getRotation2d().getDegrees();
     }
 
     public Rotation2d getRotation2d() {
         return new Rotation2d(this.m_gyro.getAngle());
+    }
+
+    public SwerveModuleState[] getModuleStates() {
+        return new SwerveModuleState[] {
+            m_frontLeft.getState(),
+            m_frontRight.getState(),
+            m_backLeft.getState(),
+            m_backRight.getState()
+        };
+    }
+
+    public SwerveDriveOdometry getOdometry() {
+        m_odometry.update(getRotation2d(), new SwerveModulePosition[]{
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_backLeft.getPosition(),
+            m_backRight.getPosition()
+        });
+        return m_odometry;
     }
 }

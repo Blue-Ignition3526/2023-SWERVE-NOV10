@@ -6,6 +6,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants;
 
@@ -27,7 +28,7 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
     private final String m_name;
 
     // Current state
-    private SwerveModuleState state;
+    private SwerveModuleState state = new SwerveModuleState();
 
     public SwerveModuleIOSparkMax(Object[] Arr) {
         // Get variables from options and add them to the class
@@ -140,4 +141,10 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
     public SwerveModuleState getState() {
         return state;
     }
+
+    public SwerveModulePosition getPosition() {
+        return new SwerveModulePosition(m_driveMotorEncoder.getPosition(), new Rotation2d(getAbsoluteEncoderRad()));
+    }
+
+
 }

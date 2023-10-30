@@ -31,8 +31,8 @@ public final class Constants {
       public static final double kGlobalTurningOffsetRad = Math.toRadians(90);
 
       public static final class PIDParameters {
-        public static double m_kP = 0.05;
-        public static double m_kI = 0.1;
+        public static double m_kP = 0.15;
+        public static double m_kI = 0.0;
         public static double m_kD = 0.0;
       }
 
