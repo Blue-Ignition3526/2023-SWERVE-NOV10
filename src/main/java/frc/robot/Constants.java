@@ -8,6 +8,7 @@ import org.team3526.lib.util.Conversions;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public final class Constants {
@@ -19,17 +20,19 @@ public final class Constants {
       public static final double kDriveMotorGearRatio = 1.0 / 6.12; // 6.12:1 Drive
       public static final double kTurningMotorGearRatio = 1.0 / 12.8; // 12.8:1 Steering
 
-      public static final double kGlobalModuleTurningOffset = Math.toRadians(-90);
-
       public static final double kDriveEncoder_RotationToMeter = kDriveMotorGearRatio * kWheelDiameterMeters * Math.PI; // Conversion Rotaciones a Metros
       public static final double kDriveEncoder_RPMToMeterPerSecond = kDriveEncoder_RotationToMeter / 60.0; // Conversion RPM a Metros por Segundo
 
       public static final double kTurningEncoder_RotationToRadian = kTurningMotorGearRatio * 2.0 * Math.PI; // Conversion Rotaciones a Radianes
       public static final double kTurningEncoder_RPMToRadianPerSecond = kTurningEncoder_RotationToRadian / 60.0; // Conversion RPM a Radianes por Segundo
 
+      public static final double kTurningMotorEncoderUpdatePeriod = 0.5;
+
+      public static final double kGlobalTurningOffsetRad = Math.toRadians(90);
+
       public static final class PIDParameters {
-        public static double m_kP = 0.5;
-        public static double m_kI = 0.0;
+        public static double m_kP = 0.05;
+        public static double m_kI = 0.1;
         public static double m_kD = 0.0;
       }
 
@@ -61,6 +64,13 @@ public final class Constants {
         public static final double kTeleopMaxAngularAccelerationUnitsPerSecond = 3.0; // Maxima Aceleracion Angular
 
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(kTeleopMaxAngularSpeedRadiansPerSecond, kTeleopMaxAngularAccelerationUnitsPerSecond);
+
+        public static final SwerveDriveKinematics m_swerveDriveKinematics = new SwerveDriveKinematics(
+          Constants.Swerve.Physical.m_frontLeftLocation,
+          Constants.Swerve.Physical.m_frontRightLocation,
+          Constants.Swerve.Physical.m_backLeftLocation,
+          Constants.Swerve.Physical.m_backRightLocation
+        );
       }
 
     public final static class Motors {

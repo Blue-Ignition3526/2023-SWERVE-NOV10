@@ -12,7 +12,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Swerve.Physical;
-import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.SwerveDrive.SwerveDrive;
 
 public class DriveSwerve extends CommandBase {
   SwerveDrive m_swerveDrive;
@@ -53,7 +53,7 @@ public class DriveSwerve extends CommandBase {
     rotSpeed = rotLimiter.calculate(rotSpeed) * Physical.kTeleopMaxAngularSpeedRadiansPerSecond;
 
     ChassisSpeeds m_chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, -rotSpeed, this.m_swerveDrive.getRotation2d());
-    SwerveModuleState[] m_moduleStates = m_swerveDrive.m_swerveDriveKinematics.toSwerveModuleStates(m_chassisSpeeds);
+    SwerveModuleState[] m_moduleStates = Constants.Swerve.Physical.m_swerveDriveKinematics.toSwerveModuleStates(m_chassisSpeeds);
     m_swerveDrive.setModuleStates(m_moduleStates);
   }
 
