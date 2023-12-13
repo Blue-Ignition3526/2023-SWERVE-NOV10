@@ -68,6 +68,7 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
     public void updateInputs(SwerveModuleIOInputs inputs) {
         inputs.angle = state.angle.getRadians();
         inputs.speed = state.speedMetersPerSecond;
+        inputs.distance = m_driveMotorEncoder.getPosition();
     }
 
     // Update the motor encoders to the proper values
