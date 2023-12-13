@@ -66,6 +66,7 @@ public class SwerveModuleIODriveFalconTurnNeo implements SwerveModuleIO {
     public void updateInputs(SwerveModuleIOInputs inputs) {
         inputs.angle = this.state.angle.getRadians();
         inputs.speed = this.state.speedMetersPerSecond;
+        inputs.distance = m_driveMotor.getSelectedSensorPosition();
     }
 
     // Update the motor encoders to the proper values

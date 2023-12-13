@@ -1,8 +1,8 @@
 package frc.robot.subsystems.SwerveModule;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
 
 public class SwerveModuleIOSim implements SwerveModuleIO {
     // Swerve module name
@@ -10,21 +10,20 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
 
     // Current state
     private SwerveModuleState state = new SwerveModuleState();
+    private double stateUpdated = Timer.getFPGATimestamp();
+    private double distance = 0;
 
     public SwerveModuleIOSim(Object[] Arr) {
         // Set module name
         m_name = (String) Arr[7];
     }
 
-    public SwerveModuleIOSim(String name) {
-        // Set module name
-        m_name = name;
-    }
-
     @Override
     public void updateInputs(SwerveModuleIOInputs inputs) {
         inputs.angle = state.angle.getRadians();
         inputs.speed = state.speedMetersPerSecond;
+        inputs.distance = this.distance;
+        this.distance += this.state.speedMetersPerSecond * (Timer.getFPGATimestamp() - this.stateUpdated);
     }
 
     @Override
@@ -35,6 +34,7 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
     @Override
     public void setState(SwerveModuleState state) {
         this.state = state;
+        this.stateUpdated = Timer.getFPGATimestamp();
     }
 
     @Override
@@ -48,6 +48,6 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
     }
 
     public SwerveModulePosition getPosition() {
-        return new SwerveModulePosition(0, new Rotation2d());
+        return new SwerveModulePosition(this.distance, state.angle);
     }
 }

@@ -2,7 +2,6 @@ package frc.robot.subsystems.SwerveModule;
 
 import org.littletonrobotics.junction.AutoLog;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
@@ -11,6 +10,7 @@ public interface SwerveModuleIO {
     class SwerveModuleIOInputs {
         double angle;
         double speed;
+        double distance;
     }
 
     public void updateInputs(SwerveModuleIOInputs inputs);

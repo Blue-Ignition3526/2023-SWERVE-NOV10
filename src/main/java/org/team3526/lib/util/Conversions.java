@@ -1,7 +1,5 @@
 package org.team3526.lib.util;
 
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-
 public class Conversions {
 
   /**

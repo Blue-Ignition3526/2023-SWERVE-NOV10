@@ -37,16 +37,16 @@ public class RobotContainer {
       this.m_backLeft = new SwerveModule(new SwerveModuleIOSparkMax(Constants.Swerve.Motors.kBackLeftVars));
       this.m_backRight = new SwerveModule(new SwerveModuleIOSparkMax(Constants.Swerve.Motors.kBackRightVars));
       
-      this.m_swerveDrive = new SwerveDrive(new SwerveDriveIOReal(m_frontLeft, m_frontRight, m_backLeft, m_backRight));
+      this.m_swerveDrive = new SwerveDrive(new SwerveDriveIOReal(this.m_frontLeft, this.m_frontRight, this.m_backLeft, this.m_backRight));
 
       System.out.println("Real");
     } else {
-      this.m_frontLeft = new SwerveModule(new SwerveModuleIOSim(Constants.Swerve.Motors.kFrontLeftVars));
-      this.m_frontRight = new SwerveModule(new SwerveModuleIOSim(Constants.Swerve.Motors.kFrontRightVars));
-      this.m_backLeft = new SwerveModule(new SwerveModuleIOSim(Constants.Swerve.Motors.kBackLeftVars));
-      this.m_backRight = new SwerveModule(new SwerveModuleIOSim(Constants.Swerve.Motors.kBackRightVars));
+      this.m_frontLeft = new SwerveModule(new SwerveModuleIOSim(Constants.Swerve.Motors.kFrontLeftVars) {});
+      this.m_frontRight = new SwerveModule(new SwerveModuleIOSim(Constants.Swerve.Motors.kFrontRightVars) {});
+      this.m_backLeft = new SwerveModule(new SwerveModuleIOSim(Constants.Swerve.Motors.kBackLeftVars) {});
+      this.m_backRight = new SwerveModule(new SwerveModuleIOSim(Constants.Swerve.Motors.kBackRightVars) {});
       
-      this.m_swerveDrive = new SwerveDrive(new SwerveDriveIOSim(m_frontLeft, m_frontRight, m_backLeft, m_backRight));
+      this.m_swerveDrive = new SwerveDrive(new SwerveDriveIOSim(this.m_frontLeft, this.m_frontRight, this.m_backLeft, this.m_backRight));
 
       System.out.println("Sim");
     }
@@ -59,12 +59,19 @@ public class RobotContainer {
       new DriveSwerve(
         m_swerveDrive,
         () -> m_driverController.getLeftX(),
-        () -> m_driverController.getLeftY(),
-        () -> m_driverController.getRightX()
+        () -> -m_driverController.getLeftY(),
+        () -> m_driverController.getRightX(),
+        () -> m_driverController.a().getAsBoolean()
       )
     );
 
-    m_driverController.rightTrigger(0.1).whileTrue(new DriveSwerve(m_swerveDrive, () -> 0.0, () -> m_driverController.getRightTriggerAxis(), () -> 0.0));
+    m_driverController.rightTrigger(0.1).whileTrue(new DriveSwerve(
+      m_swerveDrive,
+      () -> 0.0,
+      () -> m_driverController.getRightTriggerAxis(),
+      () -> 0.0,
+      () -> m_driverController.a().getAsBoolean()
+    ));
   }
 
   public Command getAutonomousCommand() {

@@ -30,6 +30,12 @@ public class SwerveModule extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.getInstance().processInputs("SwerveDrive/SwerveModule/" + io.getName(), inputs);
+
+        Logger.getInstance().recordOutput("SwerveDrive/SwerveModule/" + io.getName() + "/Speed", io.getState().speedMetersPerSecond);
+        Logger.getInstance().recordOutput("SwerveDrive/SwerveModule/" + io.getName() + "/AngleSetpointRad", io.getState().angle.getRadians());
+        Logger.getInstance().recordOutput("SwerveDrive/SwerveModule/" + io.getName() + "/AngleSetpointDeg", io.getState().angle.getDegrees());
+        Logger.getInstance().recordOutput("SwerveDrive/SwerveModule/" + io.getName() + "/AngleRad", io.getPosition().angle.getRadians());
+        Logger.getInstance().recordOutput("SwerveDrive/SwerveModule/" + io.getName() + "/AngleDeg", io.getPosition().angle.getDegrees());
     }
 
     public SwerveModuleState getState() {

@@ -20,16 +20,18 @@ public class DriveSwerve extends CommandBase {
   Supplier<Double> x;
   Supplier<Double> y;
   Supplier<Double> rot;
+  Supplier<Boolean> fieldRelative;
 
   SlewRateLimiter xLimiter = new SlewRateLimiter(Constants.Swerve.Physical.kTeleopMaxAccelerationUnitsPerSecond);
   SlewRateLimiter yLimiter = new SlewRateLimiter(Constants.Swerve.Physical.kTeleopMaxAccelerationUnitsPerSecond);
   SlewRateLimiter rotLimiter = new SlewRateLimiter(Constants.Swerve.Physical.kTeleopMaxAngularAccelerationUnitsPerSecond);
   
-  public DriveSwerve(SwerveDrive swerveDrive, Supplier<Double> x, Supplier<Double> y, Supplier<Double> rot) {
+  public DriveSwerve(SwerveDrive swerveDrive, Supplier<Double> x, Supplier<Double> y, Supplier<Double> rot, Supplier<Boolean> fieldRelative) {
     this.m_swerveDrive = swerveDrive;
     this.x = x;
     this.y = y;
     this.rot = rot;
+    this.fieldRelative = fieldRelative;
     addRequirements(m_swerveDrive);
   }
 
@@ -52,9 +54,15 @@ public class DriveSwerve extends CommandBase {
     ySpeed = yLimiter.calculate(ySpeed) * Physical.kTeleopMaxSpeedMetersPerSecond;
     rotSpeed = rotLimiter.calculate(rotSpeed) * Physical.kTeleopMaxAngularSpeedRadiansPerSecond;
 
-    ChassisSpeeds m_chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, -rotSpeed, this.m_swerveDrive.getRotation2d());
+    ChassisSpeeds m_chassisSpeeds;
+    if (this.fieldRelative.get()) {
+      m_chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, -rotSpeed, this.m_swerveDrive.getRotation2d());
+    } else {
+      m_chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, -rotSpeed);
+    }
     SwerveModuleState[] m_moduleStates = Constants.Swerve.Physical.m_swerveDriveKinematics.toSwerveModuleStates(m_chassisSpeeds);
     m_swerveDrive.setModuleStates(m_moduleStates);
+    m_swerveDrive.setSpeeds(m_chassisSpeeds);
   }
 
   // Called once the command ends or is interrupted.

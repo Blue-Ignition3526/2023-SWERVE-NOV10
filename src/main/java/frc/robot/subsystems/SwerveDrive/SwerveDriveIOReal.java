@@ -3,6 +3,7 @@ package frc.robot.subsystems.SwerveDrive;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -21,13 +22,10 @@ public class SwerveDriveIOReal implements SwerveDriveIO {
     // Create a NavX gyro over I2C MXP
     private final AHRS m_gyro = new AHRS(I2C.Port.kMXP);
 
+    private ChassisSpeeds speeds = new ChassisSpeeds();
+
     // Create a swerve drive odometry instance to calculate robot position
-    public final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(Constants.Swerve.Physical.m_swerveDriveKinematics, getRotation2d(), new SwerveModulePosition[]{
-        new SwerveModulePosition(),
-        new SwerveModulePosition(),
-        new SwerveModulePosition(),
-        new SwerveModulePosition()
-    });
+    public final SwerveDriveOdometry m_odometry;
 
     public SwerveDriveIOReal(
         SwerveModule m_frontLeft,
@@ -49,6 +47,13 @@ public class SwerveDriveIOReal implements SwerveDriveIO {
                 m_gyro.zeroYaw();
             } catch (Exception e) {}
         }).start();
+
+        this.m_odometry = new SwerveDriveOdometry(Constants.Swerve.Physical.m_swerveDriveKinematics, getRotation2d(), new SwerveModulePosition[]{
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_backLeft.getPosition(),
+            m_backRight.getPosition()
+        });
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -80,10 +85,22 @@ public class SwerveDriveIOReal implements SwerveDriveIO {
         inputs.backRightSpeed = this.m_backRight.getState().speedMetersPerSecond;
 
         inputs.gyroAngle = getRotation2d().getDegrees();
+
+        inputs.xSpeed = speeds.vxMetersPerSecond;
+        inputs.ySpeed = speeds.vyMetersPerSecond;
+        inputs.rotSpeed = speeds.omegaRadiansPerSecond;
+    }
+
+    public void setSpeeds(ChassisSpeeds speeds) {
+        this.speeds = speeds;
+    }
+
+    public ChassisSpeeds getSpeeds() {
+        return this.speeds;
     }
 
     public Rotation2d getRotation2d() {
-        return new Rotation2d(this.m_gyro.getAngle());
+        return new Rotation2d(Math.toRadians(this.m_gyro.getAngle() % 360));
     }
 
     public SwerveModuleState[] getModuleStates() {
@@ -96,12 +113,16 @@ public class SwerveDriveIOReal implements SwerveDriveIO {
     }
 
     public SwerveDriveOdometry getOdometry() {
-        m_odometry.update(getRotation2d(), new SwerveModulePosition[]{
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_backLeft.getPosition(),
-            m_backRight.getPosition()
-        });
+        try {
+            m_odometry.update(getRotation2d(), new SwerveModulePosition[]{
+                m_frontLeft.getPosition(),
+                m_frontRight.getPosition(),
+                m_backLeft.getPosition(),
+                m_backRight.getPosition()
+            });
+        } catch (Exception e) {
+            System.out.println("Error updating odometry: " + e);
+        }
         return m_odometry;
     }
 }

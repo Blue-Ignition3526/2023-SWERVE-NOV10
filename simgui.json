@@ -1,4 +1,16 @@
 {
+  "HALProvider": {
+    "PowerDistributions": {
+      "1": {
+        "PowerDistribution[1]": {
+          "open": true
+        }
+      },
+      "window": {
+        "visible": true
+      }
+    }
+  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo"
@@ -12,6 +24,15 @@
       "open": false
     },
     "transitory": {
+      "AdvantageKit": {
+        "RealOutputs": {
+          "SwerveDrive": {
+            "open": true
+          },
+          "open": true
+        },
+        "open": true
+      },
       "LiveWindow": {
         "open": true
       },
